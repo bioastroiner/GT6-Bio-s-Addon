@@ -1,0 +1,159 @@
+buildscript {
+    repositories {
+        mavenCentral()
+		maven {
+            name = "gt"
+            url = "http://gregtech.overminddl1.com/"
+		}
+        maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "OC repo"
+			url = "http://maven.cil.li/"
+		}
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+allprojects {
+	tasks.withType(JavaCompile) {
+		options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+	}
+}
+
+apply plugin: 'eclipse'
+eclipse {
+	classpath {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
+apply plugin: 'idea'
+idea{
+	module {
+		downloadJavadoc = true
+		downloadSources = true
+	}
+}
+
+apply plugin: 'forge'
+
+//version = "1.0.0-a.00"
+version = "<UNKNOWN>"
+group= "io.github.bioastroiner" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "gt6bio"
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "eclipse"
+}
+
+repositories {
+	maven {
+		name = "gt"
+		url = "http://gregtech.overminddl1.com/"
+	}
+}
+
+dependencies {
+	compile fileTree(dir: 'lib', include: '*.jar')
+
+    compile "com.gregoriust.gregtech:gregtech_1.7.10:SNAPSHOT:dev"
+	compile 'net.industrial-craft:industrialcraft-2:2.2.828-experimental:api'
+    compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+
+    //compile "li.cil.oc:OpenComputers:MC1.7.10-1.6.2.1078-dev:dev"
+	//compile group: 'com.gregoriust.gregtech', name: 'gregtech_1.7.10', version: '6.05.48', classifier: 'dev'
+
+    // `compile` means it is both compiled with and run with `run*`
+	// `compileOnly` means it is only used to compile with but not run in dev via run*
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+		exclude 'thumbs.db'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+		exclude 'thumbs.db'
+    }
+}
+
+def filteredSourceDir = file("${buildDir}/filtered") 
+
+sourceSets {
+	ahem {
+		java {
+			srcDirs = [file("${buildDir}/sources/java")]
+			//include 'io/bioastroiner/gt6bio/**'
+			exclude 'io/bioastroiner/gt6bio/GT6BioMain.java'
+		}
+	}
+}
+
+sourceSets {
+    // This source set will contain all sources that we filter 
+    filtered { 
+        java { 
+            srcDirs = [sourceSets.ahem.java, filteredSourceDir] 
+        } 
+    } 
+} 
+
+// tell the compileJava task to compile the filtered source 
+compileJava.source = sourceSets.filtered.java 
+
+// copy the main sources and filter any '$version' occurences. 
+task processVersion (type: Copy) { 
+    from "io/github/bioastroiner/gt6bio/GT6BioMain.java"
+    into filteredSourceDir 
+    expand 'version':project.version
+} 
+
+compileJava.dependsOn processVersion 
+
+task deobfJar(type: Jar, dependsOn: 'jar') {
+    from "build/classes/main"
+	from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+		exclude 'thumbs.db'
+    }
+    classifier "dev"
+}
+
+task sourceJar(type: Jar, dependsOn: 'sourceMainJava') {
+    from "build/sources/java/bio/astroiner/gt6bio/api"
+    classifier "api"
+}
+
+artifacts {
+    archives deobfJar
+	archives sourceJar
+}
+
+idea { module { inheritOutputDirs = true } }
