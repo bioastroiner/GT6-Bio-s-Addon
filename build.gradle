@@ -54,8 +54,7 @@ idea{
 
 apply plugin: 'forge'
 
-//version = "1.0.0-a.00"
-version = "<UNKNOWN>"
+version = "1.0.0-a.00"
 group= "io.github.bioastroiner" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "gt6bio"
 

@@ -13,10 +13,15 @@ public class GT6BioMain extends Abstract_Mod {
     public static final String MOD_ID = "gt6bio";
     public static final String MOD_NAME = "Gregtech 6 Bio's Addon";
     public static final String VERSION = "${version}";
+    @Mod.Instance
     public static GT6BioMain instance;
 
-    @SidedProxy(modId = MOD_ID, clientSide = "io.bioastroiner.gt6bio.GT6Bio_Client", serverSide = "io.bioastroiner.gt6bio.GT6Bio_Server")
+    @SidedProxy(modId = MOD_ID, clientSide = "io.github.bioastroiner.gt6bio.GT6Bio_Client", serverSide = "io.github.bioastroiner.gt6bio.GT6Bio_Server")
     public static Abstract_Proxy PROXY;
+
+    public GT6BioMain(){
+        instance=this;
+    }
 
     @Override
     public String getModID() {
