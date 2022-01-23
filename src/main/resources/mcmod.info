@@ -1,0 +1,16 @@
+[
+{
+  "modid": "gt6bio",
+  "name": "Gregtech Bio's Addon",
+  "description": "it's an Addon too Gregtech",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["BioAstroiner"],
+  "credits": "Overmind Greg Guys on GTCEu server and Bear's den",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,5 +1,7 @@
 package io.github.bioastroiner.gt6bio.items;
 
+import static io.github.bioastroiner.gt6bio.GT6BioMain.MOD_ID;
+
 public class ModItems {
     public static void init(){
         // Initialize GT based Items

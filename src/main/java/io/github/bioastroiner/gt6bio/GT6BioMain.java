@@ -4,6 +4,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import gregapi.api.Abstract_Mod;
 import gregapi.api.Abstract_Proxy;
+import gregapi.item.multiitem.MultiItemRandom;
+import io.github.bioastroiner.gt6bio.items.GT6Bio_MetaItem;
 import io.github.bioastroiner.gt6bio.items.ModItems;
 
 
@@ -15,6 +17,8 @@ public class GT6BioMain extends Abstract_Mod {
     public static final String VERSION = "${version}";
     @Mod.Instance
     public static GT6BioMain instance;
+    public static MultiItemRandom ITEMS;
+
 
     @SidedProxy(modId = MOD_ID, clientSide = "io.github.bioastroiner.gt6bio.GT6Bio_Client", serverSide = "io.github.bioastroiner.gt6bio.GT6Bio_Server")
     public static Abstract_Proxy PROXY;
@@ -46,6 +50,7 @@ public class GT6BioMain extends Abstract_Mod {
     @Override
     public void onModPreInit2(cpw.mods.fml.common.event.FMLPreInitializationEvent aEvent) {
         ModItems.init();
+        ITEMS = new GT6Bio_MetaItem();
     }
 
     @Override

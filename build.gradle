@@ -30,11 +30,11 @@ buildscript {
     }
 }
 
-// allprojects {
-// 	tasks.withType(JavaCompile) {
-// 		options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
-// 	}
-// }
+ allprojects {
+ 	tasks.withType(JavaCompile) {
+ 		options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+ 	}
+ }
 
 apply plugin: 'eclipse'
 eclipse {
